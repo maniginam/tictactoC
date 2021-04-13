@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "CuTest.h"
-#include "../player.h"
+#include "../src/player.h"
 #include <string.h>
 
 void TestPlayer (CuTest *tc) {
