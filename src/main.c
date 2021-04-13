@@ -3,6 +3,6 @@
 #include "player.h"
 
 int main() {
-    int player = askPlayer();
+    int player = ask_player();
 
 }
