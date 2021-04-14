@@ -4,6 +4,19 @@
 #include "../src/game.h"
 #include "../src/player.h"
 #include <string.h>
+#include "test.h"
+
+struct gameStatus game;
+
+void initTestGame(struct gameStatus *game, int boardSize, int human);
+
+void initTestGame(struct gameStatus *game, int boardSize, int human) {
+    int board[boardSize];
+    game->currentPlayer = 1;
+    game->winner = 0;
+    game->board = board;
+    game->humanToken = human;
+}
 
 void TestPlayerPosition(CuTest *tc) {
     char littleX[] = "x";
@@ -45,7 +58,10 @@ void TestPlayerCurrent(CuTest *tc) {
 }
 
 void TestRunGame(CuTest *tc) {
-    struct gameStatus game;
+//    struct gameStatus game;
+    initTestGame(&game, 9, 1);
+//    int board[9];
+//    game.board = board;
     game.humanToken = 1;
     game.currentPlayer = 1;
     game.winner = 0;
@@ -58,79 +74,82 @@ void TestRunGame(CuTest *tc) {
 }
 
 void TestNotGameOver(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
-    CuAssertTrue(tc, (gameOver(&board) == 0));
+//    struct gameStatus game;
+    initTestGame(&game, 9, 1);
+    CuAssertTrue(tc, (isGameOver(game.board) == 0));
 }
 
 void TestCatsGameOver(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
-    game.board[4]= 1;
-    game.board[0]= 2;
-    game.board[6]= 1;
-    game.board[2]= 2;
-    game.board[1]= 1;
-    game.board[3]= 2;
-    game.board[5]= 1;
-    game.board[7]= 2;
+//    struct gameStatus game;
+    initTestGame(&game, 9, 1);
+    game.board[4] = 1;
+    game.board[0] = 2;
+    game.board[6] = 1;
+    game.board[2] = 2;
+    game.board[1] = 1;
+    game.board[3] = 2;
+    game.board[5] = 1;
+    game.board[7] = 2;
     game.board[8] = 1;
-    CuAssertTrue(tc, (gameOver(&board) == 1));
+    CuAssertTrue(tc, (isGameOver(game.board) == 1));
 }
 
 void TestGameOverXWins(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
+    initTestGame(&game, 9, 1);
     game.board[0] = 1;
     game.board[1] = 1;
     game.board[2] = 1;
-    CuAssertTrue(tc, (gameOver(&board) == 1));
+    CuAssertTrue(tc, (isGameOver(game.board) == 1));
+    CuAssertTrue(tc, (isWinner(game.board) == 1));
+    CuAssertIntEquals(tc, 1, game.winner);
 }
 
 void TestGameOverOWins(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
+//    struct gameStatus game;
+//    int *board = game.board;
+//    struct gameStatus game;
+    initTestGame(&game, 9, 1);
     game.board[0] = 2;
     game.board[1] = 2;
     game.board[2] = 2;
-    CuAssertTrue(tc, (gameOver(&board) == 1));
+    CuAssertTrue(tc, (isGameOver(game.board) == 1));
 }
 
 void TestHumanTurn(CuTest *tc) {
-    struct gameStatus game;
+//    struct gameStatus game;
     game.humanToken = 1;
     game.currentPlayer = 1;
     game.winner = 0;
     play_game(&game);
     CuAssertIntEquals(tc, 2, game.humanToken);
     CuAssertIntEquals(tc, 2, game.currentPlayer);
-    CuAssertIntEquals(tc, 1,  game.board[0]);
+    CuAssertIntEquals(tc, 1, game.board[0]);
     CuAssertIntEquals(tc, 0, game.board[1]);
     CuAssertIntEquals(tc, 0, game.board[2]);
-    CuAssertIntEquals(tc, 0,  game.board[3]);
+    CuAssertIntEquals(tc, 0, game.board[3]);
     CuAssertIntEquals(tc, 0, game.winner);
 }
 
 void TestEmptyBoardNOTWin(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
-    CuAssertTrue(tc, (isWinner(&board) != 1));
+//    struct gameStatus game;
+//    int *board = game.board;
+    CuAssertTrue(tc, (isWinner(game.board) != 1));
 }
 
 void TestOneBoxFilledBoardNOTWin(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
+//    struct gameStatus game;
+//    int *board = game.board;
     game.board[0] = 1;
-    CuAssertTrue(tc, (isWinner(&board) != 1));
+    CuAssertTrue(tc, (isWinner(game.board) != 1));
 }
 
 void TestOneRowMixedNOTWin(CuTest *tc) {
-    struct gameStatus game;
-    int *board = game.board;
+//    struct gameStatus game;
+//    int *board = game.board;
     game.board[1] = 1;
     game.board[2] = 2;
     game.board[3] = 1;
-    CuAssertTrue(tc, (isWinner(&board) != 1));
+    CuAssertTrue(tc, (isWinner(game.board) != 1));
 }
 
 
@@ -143,7 +162,7 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestCatsGameOver);
     SUITE_ADD_TEST(suite, TestGameOverXWins);
     SUITE_ADD_TEST(suite, TestGameOverOWins);
-    SUITE_ADD_TEST(suite, TestHumanTurn);
+//    SUITE_ADD_TEST(suite, TestHumanTurn);
     SUITE_ADD_TEST(suite, TestEmptyBoardNOTWin);
     SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
     SUITE_ADD_TEST(suite, TestOneRowMixedNOTWin);
