@@ -6,7 +6,7 @@
 
 struct gameStatus initGame(struct gameStatus *game);
 void printWinner(struct gameStatus *game);
-char *promptHuman();
+int promptHuman();
 
 int main() {
     struct gameStatus game;
@@ -16,8 +16,8 @@ int main() {
 }
 
 struct gameStatus initGame(struct gameStatus *game) {
-    game->currentPlayer = "X";
-    game->winner = NULL;
+    game->currentPlayer = 1;
+    game->winner = 0;
     game->humanToken = promptHuman(game);
     return *game;
 }
@@ -30,13 +30,9 @@ void printWinner(struct gameStatus *game) {
     }
 }
 
-char *promptHuman() {
+int promptHuman() {
     int human = sendPrompt();
-    if(human == 1) {
-        return "X";
-    } else {
-        return "O";
-    }
+  return human;
 }
 
 

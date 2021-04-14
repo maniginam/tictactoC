@@ -2,13 +2,16 @@
 #define TICTACTOC_GAME_H
 
 struct gameStatus {
-    char *board[9];
-    char *currentPlayer;
-    char *humanToken;
-    char *winner;
+    int board[9];
+    int currentPlayer;
+    int humanToken;
+    int winner;
 };
 
 void run_game(struct gameStatus *game);
 void play_game(struct gameStatus *game);
+
+int isWinner(int *board[9]);
+int gameOver(int *board[9]);
 
 #endif //TICTACTOC_GAME_H
