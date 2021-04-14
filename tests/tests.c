@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include "CuTest.h"
+#include "../src/main.h"
+#include "../src/game.h"
 #include "../src/player.h"
 #include <string.h>
 
-void TestPlayerPosition (CuTest *tc) {
+void TestPlayerPosition(CuTest *tc) {
     char littleX[] = "x";
     int expectedx = 1;
     int resultx = assign_player(littleX);
@@ -25,7 +27,7 @@ void TestPlayerPosition (CuTest *tc) {
     CuAssertIntEquals(tc, expectedO, resultO);
 }
 
-void TestPlayerCurrent (CuTest *tc) {
+void TestPlayerCurrent(CuTest *tc) {
     int game_start = 0;
     int expected = 1;
     int result = set_current_player(game_start);
@@ -42,11 +44,48 @@ void TestPlayerCurrent (CuTest *tc) {
     CuAssertIntEquals(tc, expected1, result1);
 }
 
+void TestRunGame(CuTest *tc) {
+    struct gameStatus game;
+    game.humanToken = "X";
+    game.currentPlayer = "X";
+    game.winner = NULL;
+    game.board[0] = "X";
+    game.board[1] = "X";
+    game.board[2] = "X";
+    CuAssertStrEquals(tc, NULL, game.winner);
+    run_game(&game);
+    CuAssertStrEquals(tc, "X", game.winner);
+}
 
-CuSuite* GetSuite() {
-    CuSuite* suite = CuSuiteNew();
+void TestHumanTurn(CuTest *tc) {
+    struct gameStatus game;
+    game.humanToken = "X";
+    game.currentPlayer = "X";
+    game.winner = NULL;
+    play_game(&game);
+    CuAssertStrEquals(tc, "O", game.humanToken);
+    CuAssertStrEquals(tc, "O", game.currentPlayer);
+    CuAssertStrEquals(tc, "X",  game.board[0]);
+    CuAssertStrEquals(tc, NULL, game.board[1]);
+    CuAssertStrEquals(tc, NULL, game.board[2]);
+    CuAssertStrEquals(tc, NULL,  game.board[3]);
+    CuAssertStrEquals(tc, NULL, game.winner);
+}
+
+//void TestBoardNotOver(CuTest *tc) {
+//    struct gameStatus game;
+//    CuAssertTrue(!isWinner(game.board));
+//}
+
+
+CuSuite *GetSuite() {
+    CuSuite *suite = CuSuiteNew();
     SUITE_ADD_TEST(suite, TestPlayerPosition);
     SUITE_ADD_TEST(suite, TestPlayerCurrent);
+    SUITE_ADD_TEST(suite, TestRunGame);
+    SUITE_ADD_TEST(suite, TestHumanTurn);
+//    SUITE_ADD_TEST(suite, TestCheckForWin);
+//    SUITE_ADD_TEST(suite, TestWinner);
     return suite;
 }
 

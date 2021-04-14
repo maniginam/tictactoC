@@ -2,16 +2,16 @@
 #include <string.h>
 #include "player.h"
 
-int ask_player() {
-    char input[32];
-    int player;
+int sendPrompt() {
+    char input[8];//, piece[32];
     printf("X or O?\n");
+//    fgets(input, 32, stdin);
     scanf("%s", input);
-    player = assign_player(input);
+    int player = assign_player(input);
     if (player == 1) {
-        printf("You go first");
+        printf("You go first\n");
     } else {
-        printf("Computer goes first");
+        printf("Computer goes first\n");
     }
     return player;
 }
@@ -25,12 +25,9 @@ int assign_player(char *input) {
 }
 
 int set_current_player(int last_player) {
-    switch (last_player) {
-        case 1 :
-            return 2;
-            break;
-        default :
-            return 1;
-
+    if(last_player == 1) {
+        return 2;
+    } else {
+        return 1;
     }
 }
