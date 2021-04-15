@@ -3,6 +3,7 @@
 #include "game.h"
 #include "player.h"
 #include <string.h>
+#include <stdlib.h>
 
 struct gameStatus;
 const int BOARDSIZE = 9;
@@ -32,10 +33,9 @@ int main() {
 }
 
 void initGame(struct gameStatus *game, int boardSize) {
-    int board[boardSize];
     game->currentPlayer = 1;
     game->winner = 0;
-    game->board = board;
+    game->board = malloc(boardSize * sizeof(int));
     game->humanToken = promptHuman();
 }
 

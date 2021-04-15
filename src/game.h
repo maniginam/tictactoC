@@ -12,7 +12,7 @@ void run_game(struct gameStatus *game);
 void play_game(struct gameStatus *game);
 
 int isGameOver(int *board);
-int isWinner(int *board);
-int boardIsFull(int *board);
+int isWin(int *board);
+int isBoardFull(int *board);
 
 #endif //TICTACTOC_GAME_H

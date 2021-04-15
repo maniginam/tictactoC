@@ -5,20 +5,25 @@
 #include "../src/player.h"
 #include <string.h>
 #include "test.h"
+#include <stdlib.h>
+
+//for(int i = 0; i < 9; i++) { printf("i = %d and box = %d", i, board[i]);}
 
 struct gameStatus game;
 
-void initTestGame(struct gameStatus *game, int boardSize, int human);
-
 void initTestGame(struct gameStatus *game, int boardSize, int human) {
-    int board[boardSize];
     game->currentPlayer = 1;
     game->winner = 0;
-    game->board = board;
+    game->board = malloc(boardSize * sizeof(int));
     game->humanToken = human;
 }
 
+void tearDownTestGame() {
+    free(game.board);
+}
+
 void TestPlayerPosition(CuTest *tc) {
+    printf("Player Position: \n");
     char littleX[] = "x";
     int expectedx = 1;
     int resultx = assign_player(littleX);
@@ -41,6 +46,7 @@ void TestPlayerPosition(CuTest *tc) {
 }
 
 void TestPlayerCurrent(CuTest *tc) {
+    printf("Player Current: \n");
     int game_start = 0;
     int expected = 1;
     int result = set_current_player(game_start);
@@ -55,9 +61,11 @@ void TestPlayerCurrent(CuTest *tc) {
     int expected1 = 1;
     int result1 = set_current_player(last_player2);
     CuAssertIntEquals(tc, expected1, result1);
+    tearDownTestGame();
 }
 
 void TestRunGame(CuTest *tc) {
+    printf("Run Game: \n");
 //    struct gameStatus game;
     initTestGame(&game, 9, 1);
 //    int board[9];
@@ -71,15 +79,19 @@ void TestRunGame(CuTest *tc) {
     CuAssertIntEquals(tc, 0, game.winner);
     run_game(&game);
     CuAssertIntEquals(tc, 1, game.winner);
+    tearDownTestGame();
 }
 
-void TestNotGameOver(CuTest *tc) {
+void TestEmptyBoardNotGameOver(CuTest *tc) {
+    printf("Not Game Over: \n");
 //    struct gameStatus game;
     initTestGame(&game, 9, 1);
-    CuAssertTrue(tc, (isGameOver(game.board) == 0));
+    CuAssertTrue(tc, !isGameOver(game.board));
+    tearDownTestGame();
 }
 
 void TestCatsGameOver(CuTest *tc) {
+    printf("Cat's Game: \n");
 //    struct gameStatus game;
     initTestGame(&game, 9, 1);
     game.board[4] = 1;
@@ -92,30 +104,65 @@ void TestCatsGameOver(CuTest *tc) {
     game.board[7] = 2;
     game.board[8] = 1;
     CuAssertTrue(tc, (isGameOver(game.board) == 1));
+    tearDownTestGame();
 }
 
-void TestGameOverXWins(CuTest *tc) {
+void TestOneBoxFilledBoardNOTWin(CuTest *tc) {
+    printf("One Box Board: \n");
+//    struct gameStatus game;
+//    int *board = game.board;
+    for (int i = 0; i < 9; i++) { game.board[i] = 0; }
+    initTestGame(&game, 9, 1);
+    game.board[0] = 1;
+
+    CuAssertTrue(tc, !isWin(game.board));
+    tearDownTestGame();
+}
+
+void TestOneRowMixedNOTWin(CuTest *tc) {
+    printf("One Mixed Row: \n");
+//    struct gameStatus game;
+//    int *board = game.board;
+    initTestGame(&game, 9, 1);
+    game.board[1] = 1;
+    game.board[2] = 2;
+    game.board[3] = 1;
+    CuAssertTrue(tc, (isWin(game.board) != 1));
+    tearDownTestGame();
+}
+
+void TestGameOverXWinsTopRow(CuTest *tc) {
+    printf("X Wins Top Row: \n");
     initTestGame(&game, 9, 1);
     game.board[0] = 1;
     game.board[1] = 1;
     game.board[2] = 1;
-    CuAssertTrue(tc, (isGameOver(game.board) == 1));
-    CuAssertTrue(tc, (isWinner(game.board) == 1));
+    run_game(&game);
+    CuAssertTrue(tc, isGameOver(game.board));
+    CuAssertTrue(tc, isWin(game.board));
     CuAssertIntEquals(tc, 1, game.winner);
+    tearDownTestGame();
 }
 
-void TestGameOverOWins(CuTest *tc) {
+void TestGameOverOWinsLastColumn(CuTest *tc) {
+    printf("O Wins Last Column: \n");
 //    struct gameStatus game;
 //    int *board = game.board;
 //    struct gameStatus game;
     initTestGame(&game, 9, 1);
-    game.board[0] = 2;
-    game.board[1] = 2;
+    game.currentPlayer = 2;
     game.board[2] = 2;
-    CuAssertTrue(tc, (isGameOver(game.board) == 1));
+    game.board[5] = 2;
+    game.board[8] = 2;
+    run_game(&game);
+    CuAssertTrue(tc, isGameOver(game.board));
+    CuAssertTrue(tc, isWin(game.board));
+    CuAssertIntEquals(tc, 2, game.winner);
+    tearDownTestGame();
 }
 
 void TestHumanTurn(CuTest *tc) {
+    printf("Human Turn: \n");
 //    struct gameStatus game;
     game.humanToken = 1;
     game.currentPlayer = 1;
@@ -128,28 +175,7 @@ void TestHumanTurn(CuTest *tc) {
     CuAssertIntEquals(tc, 0, game.board[2]);
     CuAssertIntEquals(tc, 0, game.board[3]);
     CuAssertIntEquals(tc, 0, game.winner);
-}
-
-void TestEmptyBoardNOTWin(CuTest *tc) {
-//    struct gameStatus game;
-//    int *board = game.board;
-    CuAssertTrue(tc, (isWinner(game.board) != 1));
-}
-
-void TestOneBoxFilledBoardNOTWin(CuTest *tc) {
-//    struct gameStatus game;
-//    int *board = game.board;
-    game.board[0] = 1;
-    CuAssertTrue(tc, (isWinner(game.board) != 1));
-}
-
-void TestOneRowMixedNOTWin(CuTest *tc) {
-//    struct gameStatus game;
-//    int *board = game.board;
-    game.board[1] = 1;
-    game.board[2] = 2;
-    game.board[3] = 1;
-    CuAssertTrue(tc, (isWinner(game.board) != 1));
+    tearDownTestGame();
 }
 
 
@@ -158,14 +184,13 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestPlayerPosition);
     SUITE_ADD_TEST(suite, TestPlayerCurrent);
 //    SUITE_ADD_TEST(suite, TestRunGame);
-    SUITE_ADD_TEST(suite, TestNotGameOver);
+    SUITE_ADD_TEST(suite, TestEmptyBoardNotGameOver);
     SUITE_ADD_TEST(suite, TestCatsGameOver);
-    SUITE_ADD_TEST(suite, TestGameOverXWins);
-    SUITE_ADD_TEST(suite, TestGameOverOWins);
-//    SUITE_ADD_TEST(suite, TestHumanTurn);
-    SUITE_ADD_TEST(suite, TestEmptyBoardNOTWin);
     SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
     SUITE_ADD_TEST(suite, TestOneRowMixedNOTWin);
+    SUITE_ADD_TEST(suite, TestGameOverXWinsTopRow);
+    SUITE_ADD_TEST(suite, TestGameOverOWinsLastColumn);
+//    SUITE_ADD_TEST(suite, TestHumanTurn);
 //    SUITE_ADD_TEST(suite, TestOneRowXsISWin);
 //    SUITE_ADD_TEST(suite, TestOneColumnOsISWin);
 //    SUITE_ADD_TEST(suite, TestLtTopToRtBotXsISWin);
