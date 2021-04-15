@@ -33,7 +33,7 @@ int main() {
 }
 
 void initGame(struct gameStatus *game, int boardSize) {
-    game->currentPlayer = 1;
+    game->currentPlayer = 2;
     game->winner = 0;
     game->board = malloc(boardSize * sizeof(int));
     game->humanToken = promptHuman();
