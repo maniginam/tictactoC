@@ -5,10 +5,15 @@
 
 #define WINS { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 }, { 1, 4, 7 }, { 2, 5, 8 }, { 0, 4, 8 }  { 2, 4 6 } }
 
-void run_game(struct gameStatus *game) {
+int nextPlayer(int playerCurrent);
+void getBox(struct gameStatus *game, int *box);
+void promptForBox(int *box);
 
+void run_game(struct gameStatus *game) {
     while (!isGameOver(game->board)) {
-        play_game(game);
+        int *box;
+        getBox(game, box);
+        play_game(game, box);
     }
 
     if (isWin(game->board)) {
@@ -16,8 +21,31 @@ void run_game(struct gameStatus *game) {
     }
 }
 
-void play_game(struct gameStatus *game) {
+void play_game(struct gameStatus *game, int *box) {
+    game->board[*box] = game->currentPlayer;
+    game->currentPlayer = nextPlayer(game->currentPlayer);
+    for (int i = 0; i < 9; i++) { printf("i = %d and box = %d\n", i, game->board[i]); }
+}
 
+void getBox(struct gameStatus *game, int *box) {
+    if(game->currentPlayer == game->humanToken) {
+        promptForBox(box);
+
+    }
+}
+
+void promptForBox(int *box) {
+    int boxSelection;
+    box = &boxSelection;
+    char input[sizeof(int)];
+    printf("It's your turn.\n Select a Box 0-8\n");
+    fgets(input, sizeof(int), stdin);
+    sscanf(input, "%d", box);
+}
+
+int nextPlayer(int playerCurrent) {
+    if (playerCurrent == 1) { return 2; }
+    else { return 1; }
 }
 
 int isGameOver(int *board) {
@@ -40,7 +68,7 @@ int isBoardFull(int *board) {
 
 int isWin(int *board) {
     int win = false;
-    for (int i = 0; i < 9; i++) { printf("i = %d and box = %d\n", i, board[i]); }
+//    for (int i = 0; i < 9; i++) { printf("i = %d and box = %d\n", i, board[i]); }
     if (board[4]) { //&& (board[4] == board[0] && board[4] == board[8] || board[4] == board[2] && board[4] == board[6] || board[4] == board[1] && board[4] == board[7] || board[4] == board[3] && board[4] == board[5])) {
         if (board[4] == board[0] && board[4] == board[8] || board[4] == board[2] && board[4] == board[6] ||
             board[4] == board[1] && board[4] == board[7] || board[4] == board[3] && board[4] == board[5]) {
