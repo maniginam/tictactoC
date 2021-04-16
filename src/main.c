@@ -5,18 +5,8 @@
 
 struct gameStatus;
 const int BOARDSIZE = 9;
-
 void initGame(struct gameStatus *game, int boardSize);
-void printWinner(struct gameStatus *game);
 int promptHuman();
-
-void printWinner(struct gameStatus *game) {
-    if(game->winner == game->humanToken) {
-        printf("You Win!");
-    } else {
-        printf("Computer Wins!");
-    }
-}
 
 int sendPrompt() {
     char input;//, piece[32];
@@ -29,12 +19,6 @@ int promptHuman() {
   return human;
 }
 
-int main() {
-    struct gameStatus game;
-    initGame(&game, BOARDSIZE);
-    run_game(&game);
-    printWinner(&game);
-}
 
 void initGame(struct gameStatus *game, int boardSize) {
     game->currentPlayer = 2;
@@ -43,4 +27,10 @@ void initGame(struct gameStatus *game, int boardSize) {
     game->humanToken = promptHuman();
 }
 
+int main() {
+    struct gameStatus game;
+    initGame(&game, BOARDSIZE);
+    run_game(&game);
+    printWinner(game.winner, game.humanToken);
+}
 

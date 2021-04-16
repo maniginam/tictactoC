@@ -32,3 +32,11 @@ void promptForBox(int *box) {
     fgets(input, sizeof(int), stdin);
     sscanf(input, "%d", box);
 }
+
+void printWinner(int winner, int human) {
+    if(winner == human) {
+        printf("You Win!");
+    } else {
+        printf("Computer Wins!");
+    }
+}
