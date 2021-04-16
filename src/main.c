@@ -1,9 +1,7 @@
 #include <stdio.h>
-#include "main.h"
-#include "game.h"
-#include "player.h"
-#include <string.h>
 #include <stdlib.h>
+#include "game.h"
+#include "messages.h"
 
 struct gameStatus;
 const int BOARDSIZE = 9;
@@ -18,6 +16,12 @@ void printWinner(struct gameStatus *game) {
     } else {
         printf("Computer Wins!");
     }
+}
+
+int sendPrompt() {
+    char input;//, piece[32];
+    offerPosition(&input);
+    return parseSelection(&input);
 }
 
 int promptHuman() {

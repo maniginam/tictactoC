@@ -8,8 +8,6 @@ struct gameStatus {
     int winner;
 };
 
-//int *box;
-
 void run_game(struct gameStatus *game);
 void play_game(struct gameStatus *game, int *box);
 

@@ -1,6 +1,0 @@
-#ifndef TICTACTOC_MAIN_H
-#define TICTACTOC_MAIN_H
-
-
-
-#endif //TICTACTOC_MAIN_H
