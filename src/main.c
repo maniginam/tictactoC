@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "game.h"
 #include "messages.h"
 
@@ -29,6 +30,7 @@ void initGame(struct gameStatus *game, int boardSize) {
 
 int main() {
     struct gameStatus game;
+    setSrand();
     initGame(&game, BOARDSIZE);
     run_game(&game);
     printWinner(game.winner, game.humanToken);

@@ -13,7 +13,7 @@ void initTestGame(struct gameStatus *game, int boardSize, int human) {
     game->winner = 0;
     game->humanToken = human;
     game->board = malloc(boardSize * sizeof(int));
-    for(int i = 0; i < 9; i++) { game->board[i] = 0; }
+    for (int i = 0; i < 9; i++) { game->board[i] = 0; }
 }
 
 void tearDownTestGame() {
@@ -52,7 +52,6 @@ void TestEmptyBoardNotGameOver(CuTest *tc) {
 
 void TestOneBoxFilledBoardNOTWin(CuTest *tc) {
     printf("One Box Board: \n");
-    for (int i = 0; i < 9; i++) { game.board[i] = 0; }
     initTestGame(&game, 9, 1);
     game.board[0] = 1;
     CuAssertTrue(tc, !isWin(game.board));
@@ -88,18 +87,14 @@ void TestCatsGameOver(CuTest *tc) {
     tearDownTestGame();
 }
 
-
-
 void TestGameOverXWinsTopRow(CuTest *tc) {
     printf("X Wins Top Row: \n");
     initTestGame(&game, 9, 1);
     game.board[0] = 1;
     game.board[1] = 1;
     game.board[2] = 1;
-    run_game(&game);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
-//    CuAssertIntEquals(tc, 1, game.winner);
     tearDownTestGame();
 }
 
@@ -110,10 +105,8 @@ void TestGameOverOWinsLastColumn(CuTest *tc) {
     game.board[2] = 2;
     game.board[5] = 2;
     game.board[8] = 2;
-    run_game(&game);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
-//    CuAssertIntEquals(tc, 2, game.winner);
     tearDownTestGame();
 }
 
@@ -123,10 +116,8 @@ void TestDiagLtTopToRtBotXISWin(CuTest *tc) {
     game.board[0] = 1;
     game.board[4] = 1;
     game.board[8] = 1;
-    run_game(&game);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
-//    CuAssertIntEquals(tc, 1, game.winner);
     tearDownTestGame();
 }
 
@@ -137,10 +128,8 @@ void TestDiagRtTopToLtBotOISWin(CuTest *tc) {
     game.board[2] = 2;
     game.board[4] = 2;
     game.board[6] = 2;
-    run_game(&game);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
-//    CuAssertIntEquals(tc, 2, game.winner);
     tearDownTestGame();
 }
 
@@ -203,8 +192,60 @@ void TestComputerOWin(CuTest *tc) {
     tearDownTestGame();
 }
 
+int isBoxGood, corners[4] = { 0, 2, 6, 8 };
+void confirmCornerBox() {
+    for (int i = 0; i < 4; i++) {
+        if (box == corners[i]) { isBoxGood = 1; }
+    }
+}
+
+void TestComputerTurnX(CuTest *tc) {
+    printf("Computer Turn X\n");
+    initTestGame(&game, 9, 1);
+    game.humanToken = 2;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    confirmCornerBox();
+    CuAssertTrue(tc, isBoxGood);
+    CuAssertIntEquals(tc, 2, game.currentPlayer);
+    CuAssertIntEquals(tc, 1, game.board[box]);
+    tearDownTestGame();
+}
+
+void TestComputerTurnO(CuTest *tc) {
+    printf("Computer Turn O\n");
+    initTestGame(&game, 9, 1);
+    game.humanToken = 1;
+    game.currentPlayer = 2;
+    game.board[0] = 1;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    confirmCornerBox();
+    CuAssertTrue(tc, isBoxGood);
+    CuAssertIntEquals(tc, 1, game.currentPlayer);
+    CuAssertIntEquals(tc, 2, game.board[box]);
+    tearDownTestGame();
+}
+
+void ComputerTakesWin(CuTest *tc) {
+    printf("Computer Takes Win\n");
+    initTestGame(&game, 9, 1);
+    game.humanToken = 1;
+    game.currentPlayer = 2;
+    game.board[0] = 2;
+    game.board[1] = 2;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    CuAssertIntEquals(tc, 2, box);
+    CuAssertIntEquals(tc, 2, game.winner);
+    CuAssertTrue(tc, isWin(game.board));
+    CuAssertTrue(tc, isGameOver(game.board));
+    tearDownTestGame();
+}
+
 CuSuite *GetSuite() {
     CuSuite *suite = CuSuiteNew();
+    setSrand();
     SUITE_ADD_TEST(suite, TestPlayerPosition);
     SUITE_ADD_TEST(suite, TestEmptyBoardNotGameOver);
     SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
@@ -218,6 +259,18 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestHumanTurnO);
     SUITE_ADD_TEST(suite, TestHumanXWin);
     SUITE_ADD_TEST(suite, TestComputerOWin);
+    SUITE_ADD_TEST(suite, TestComputerTurnX);
+    SUITE_ADD_TEST(suite, TestComputerTurnO);
+    SUITE_ADD_TEST(suite, ComputerTakesWin);
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
     return suite;
 }
 
