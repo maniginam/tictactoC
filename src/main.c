@@ -19,7 +19,6 @@ int promptHuman() {
   return human;
 }
 
-
 void initGame(struct gameStatus *game) {
     game->currentPlayer = 2;
     game->winner = 0;

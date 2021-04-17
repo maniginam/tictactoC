@@ -13,8 +13,8 @@ void run_game(struct gameStatus *game);
 void getBox(struct gameStatus *game, int *box);
 void play_game(struct gameStatus *game, int *box);
 
-void maxBox(int *scores, int *box);
-void minBox(int *scores, int *box);
+int maxBox(int *scores);
+int minBox(int *scores);
 
 int isGameOver(int *board);
 int isWin(int *board);

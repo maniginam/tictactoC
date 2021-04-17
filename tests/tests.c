@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "CuTest.h"
+#include "../src/ai.h"
 #include "../src/game.h"
 #include "../src/messages.h"
 
@@ -227,6 +228,25 @@ void TestComputerTurnO(CuTest *tc) {
     tearDownTestGame();
 }
 
+void TestMaxMinBoxInc(CuTest *tc) {
+    printf("Max & Min Box incrementing\n");
+    int scores[9] = { 1, 2 };
+    box = maxBox(scores);
+    CuAssertIntEquals(tc, 1, box);
+    box = minBox(scores);
+    CuAssertIntEquals(tc, 0, box);
+
+}
+
+void TestMaxMinBoxMixedWNegs(CuTest *tc) {
+    printf("Max & Min Box with pos & neg\n");
+    int scores[9] = { 9, -1, 2, -5, 4, -3 };
+    box = maxBox(scores);
+    CuAssertIntEquals(tc, 0, box);
+    box = minBox(scores);
+    CuAssertIntEquals(tc, 3, box);
+}
+
 void ComputerTakesWin(CuTest *tc) {
     printf("Computer Takes Win\n");
     initTestGame(&game, 1);
@@ -243,24 +263,22 @@ void ComputerTakesWin(CuTest *tc) {
     tearDownTestGame();
 }
 
-void TestMaxMinBoxInc(CuTest *tc) {
-    printf("Max & Min Box incrementing\n");
-    int scores[9] = { 1, 2 };
-    maxBox(scores, &box);
-    CuAssertIntEquals(tc, 1, box);
-    minBox(scores, &box);
-    CuAssertIntEquals(tc, 0, box);
-
+void HumanMightWin(CuTest *tc) {
+    printf("Human Might Win\n");
+    initTestGame(&game, 1);
+    game.humanToken = 1;
+    game.currentPlayer = 2;
+    game.board[0] = 1;
+    game.board[1] = 1;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    CuAssertIntEquals(tc, 2, box);
+    CuAssertIntEquals(tc, 0, game.winner);
+    CuAssertTrue(tc, !isWin(game.board));
+    CuAssertTrue(tc, !isGameOver(game.board));
+    tearDownTestGame();
 }
 
-void TestMaxMinBoxMixedWNegs(CuTest *tc) {
-    printf("Max & Min Box with pos & neg\n");
-    int scores[9] = { 9, -1, 2, -5, 4, -3 };
-    maxBox(scores, &box);
-    CuAssertIntEquals(tc, 0, box);
-    minBox(scores, &box);
-    CuAssertIntEquals(tc, 3, box);
-}
 
 
 CuSuite *GetSuite() {
@@ -284,7 +302,7 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, ComputerTakesWin);
     SUITE_ADD_TEST(suite, TestMaxMinBoxInc);
     SUITE_ADD_TEST(suite, TestMaxMinBoxMixedWNegs);
-//    SUITE_ADD_TEST(suite, );
+    SUITE_ADD_TEST(suite, HumanMightWin);
 //    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
