@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "game.h"
 #include "messages.h"
 
 struct gameStatus;
-const int BOARDSIZE = 9;
-void initGame(struct gameStatus *game, int boardSize);
+
+void initGame(struct gameStatus *game);
 int promptHuman();
 
 int sendPrompt() {
@@ -21,18 +20,18 @@ int promptHuman() {
 }
 
 
-void initGame(struct gameStatus *game, int boardSize) {
+void initGame(struct gameStatus *game) {
     game->currentPlayer = 2;
     game->winner = 0;
-    game->board = malloc(boardSize * sizeof(int));
     game->humanToken = promptHuman();
 }
 
 int main() {
     struct gameStatus game;
     setSrand();
-    initGame(&game, BOARDSIZE);
+    initGame(&game);
     run_game(&game);
     printWinner(game.winner, game.humanToken);
+    free(game.board);
 }
 
