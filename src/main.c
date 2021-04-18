@@ -20,7 +20,7 @@ int promptHuman() {
 }
 
 void initGame(struct gameStatus *game) {
-    game->currentPlayer = 2;
+    game->currentPlayer = 1;
     game->winner = 0;
     game->humanToken = promptHuman();
 }
