@@ -60,7 +60,13 @@ void TestHumanBoxChoice(CuTest *tc) {
     CuAssertTrue(tc, validBox("7"));
     CuAssertTrue(tc, !validBox("10"));
     CuAssertTrue(tc, !validBox("Z"));
+}
 
+void TestBoxisOpen(CuTest *tc) {
+    int board[9] = {1, 0, -1, 0, 0, 0, 0, 0, 0, };
+    CuAssertTrue(tc, boxOpen(board, 4));
+    CuAssertTrue(tc, !boxOpen(board, 0));
+    CuAssertTrue(tc, !boxOpen(board, 2));
 }
 
 void TestEmptyBoardNotGameOver(CuTest *tc) {
