@@ -228,24 +228,24 @@ void TestComputerTurnO(CuTest *tc) {
     tearDownTestGame();
 }
 
-void TestMaxMinBoxInc(CuTest *tc) {
-    printf("Max & Min Box incrementing\n");
-    int scores[9] = { 1, 2 };
-    box = maxBox(scores);
-    CuAssertIntEquals(tc, 1, box);
-    box = minBox(scores);
-    CuAssertIntEquals(tc, 0, box);
+void TestBoxScore(CuTest *tc) {
+    int xBoard[9] = { 1, 1, 1, 0 , 0, 0, 0, 0, 0 };
+    int oBoard[9] = { 2, 2, 2, 0 , 0, 0, 0, 0, 0 };
+    int catBoard[9] = { 2, 1, 2, 1 , 1, 2, 1, 2, 1 };
 
+    printf("Cats Game Box Score\n");
+    CuAssertIntEquals(tc, 0, scoreBox(catBoard, 1, 0));
+
+    printf("X Win This Move Box Score\n");
+    CuAssertIntEquals(tc, 10, scoreBox(xBoard, 1, 0));
+
+    printf("O Win This Move Box Score\n");
+    CuAssertIntEquals(tc, -10, scoreBox(oBoard, 2, 0));
+
+    printf("X Win 2 Moves out Box Score\n");
+    CuAssertIntEquals(tc, 8, scoreBox(xBoard, 2, 2));
 }
 
-void TestMaxMinBoxMixedWNegs(CuTest *tc) {
-    printf("Max & Min Box with pos & neg\n");
-    int scores[9] = { 9, -1, 2, -5, 4, -3 };
-    box = maxBox(scores);
-    CuAssertIntEquals(tc, 0, box);
-    box = minBox(scores);
-    CuAssertIntEquals(tc, 3, box);
-}
 
 void ComputerTakesWin(CuTest *tc) {
     printf("Computer Takes Win\n");
@@ -279,7 +279,19 @@ void HumanMightWin(CuTest *tc) {
     tearDownTestGame();
 }
 
-
+void ComputerShouldNotTakeCenterBox(CuTest *tc) {
+    printf("Computer Takes Center\n");
+    initTestGame(&game, 1);
+    game.humanToken = 1;
+    game.currentPlayer = 2;
+    game.board[0] = 1;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    CuAssertTrue(tc, box != 4);
+    CuAssertTrue(tc, !isWin(game.board));
+    CuAssertTrue(tc, !isGameOver(game.board));
+    tearDownTestGame();
+}
 
 CuSuite *GetSuite() {
     CuSuite *suite = CuSuiteNew();
@@ -300,12 +312,8 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestComputerTurnX);
     SUITE_ADD_TEST(suite, TestComputerTurnO);
     SUITE_ADD_TEST(suite, ComputerTakesWin);
-    SUITE_ADD_TEST(suite, TestMaxMinBoxInc);
-    SUITE_ADD_TEST(suite, TestMaxMinBoxMixedWNegs);
     SUITE_ADD_TEST(suite, HumanMightWin);
-//    SUITE_ADD_TEST(suite, );
-//    SUITE_ADD_TEST(suite, );
-//    SUITE_ADD_TEST(suite, );
+    SUITE_ADD_TEST(suite, ComputerShouldNotTakeCenterBox);
 //    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
