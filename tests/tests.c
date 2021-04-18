@@ -21,6 +21,18 @@ void tearDownTestGame() {
     free(game.board);
 }
 
+void makeCatsGame() {
+    game.board[4] = 1;
+    game.board[0] = -1;
+    game.board[6] = 1;
+    game.board[2] = -1;
+    game.board[1] = 1;
+    game.board[3] = -1;
+    game.board[5] = 1;
+    game.board[7] = -1;
+    game.board[8] = 1;
+}
+
 void TestPlayerPosition(CuTest *tc) {
     printf("Player Position: \n");
     char littleX[] = "x";
@@ -75,15 +87,7 @@ void TestOneRowMixedNOTWin(CuTest *tc) {
 void TestCatsGameOver(CuTest *tc) {
     printf("Cat's Game: \n");
     initTestGame(&game, 1);
-    game.board[4] = 1;
-    game.board[0] = -1;
-    game.board[6] = 1;
-    game.board[2] = -1;
-    game.board[1] = 1;
-    game.board[3] = -1;
-    game.board[5] = 1;
-    game.board[7] = -1;
-    game.board[8] = 1;
+    makeCatsGame();
     CuAssertTrue(tc, (isGameOver(game.board) == 1));
     tearDownTestGame();
 }
@@ -279,8 +283,8 @@ void HumanMightWin(CuTest *tc) {
     tearDownTestGame();
 }
 
-void ComputerShouldNotTakeCenterBox(CuTest *tc) {
-    printf("Computer Takes Center\n");
+void ComputerShouldNOTTakeCenterOrCornerBox(CuTest *tc) {
+    printf("Computer Does NOT Center or Corner\n");
     initTestGame(&game, 1);
     game.humanToken = 1;
     game.currentPlayer = -1;
@@ -288,10 +292,47 @@ void ComputerShouldNotTakeCenterBox(CuTest *tc) {
     getBox(&game, &box);
     play_game(&game, &box);
     CuAssertTrue(tc, box != 4);
+    CuAssertTrue(tc, box != 2);
+    CuAssertTrue(tc, box != 6);
+    CuAssertTrue(tc, box != 8);
     CuAssertTrue(tc, !isWin(game.board));
     CuAssertTrue(tc, !isGameOver(game.board));
     tearDownTestGame();
 }
+
+void ComputerSHOULDTakeCenterBox(CuTest *tc) {
+    printf("Computer Takes Center\n");
+    initTestGame(&game, 1);
+    game.humanToken = 1;
+    game.currentPlayer = -1;
+    game.board[0] = 1;
+    game.board[2] = -1;
+    game.board[8] = 1;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    CuAssertTrue(tc, box = 4);
+    CuAssertTrue(tc, !isWin(game.board));
+    CuAssertTrue(tc, !isGameOver(game.board));
+    tearDownTestGame();
+}
+
+void ComputerDoesNotChooseAlreadyPlayedBox(CuTest *tc) {
+    printf("Computer Does Not Cheat\n");
+    initTestGame(&game, 1);
+    box = 0;
+    game.board[0] = 1;
+    game.board[1] = 1;
+    game.board[8] = 1;
+    game.humanToken = -1;
+    game.currentPlayer = 1;
+    getBox(&game, &box);
+    play_game(&game, &box);
+    CuAssertTrue(tc, box != 0);
+    CuAssertTrue(tc, box != 1);
+    CuAssertTrue(tc, box != 8);
+    tearDownTestGame();
+}
+
 
 CuSuite *GetSuite() {
     CuSuite *suite = CuSuiteNew();
@@ -314,7 +355,12 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestBoxScore);
     SUITE_ADD_TEST(suite, ComputerTakesWin);
     SUITE_ADD_TEST(suite, HumanMightWin);
-    SUITE_ADD_TEST(suite, ComputerShouldNotTakeCenterBox);
+    SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
+    SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
+    SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
+//    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
     return suite;
