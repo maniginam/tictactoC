@@ -56,6 +56,13 @@ void TestPlayerPosition(CuTest *tc) {
     CuAssertIntEquals(tc, expectedO, resultO);
 }
 
+void TestHumanBoxChoice(CuTest *tc) {
+    CuAssertTrue(tc, validBox("7"));
+    CuAssertTrue(tc, !validBox("10"));
+    CuAssertTrue(tc, !validBox("Z"));
+
+}
+
 void TestEmptyBoardNotGameOver(CuTest *tc) {
     printf("Not Game Over: \n");
     initTestGame(&game, 1);
@@ -197,7 +204,8 @@ void TestComputerOWin(CuTest *tc) {
     tearDownTestGame();
 }
 
-int isBoxGood, corners[4] = { 0, 2, 6, 8 };
+int isBoxGood, corners[4] = {0, 2, 6, 8};
+
 void confirmCornerBox() {
     for (int i = 0; i < 4; i++) {
         if (box == corners[i]) { isBoxGood = 1; }
@@ -233,9 +241,9 @@ void TestComputerTurnO(CuTest *tc) {
 }
 
 void TestBoxScore(CuTest *tc) {
-    int xBoard[9] = { 1, 1, 1, 0 , 0, 0, 0, 0, 0 };
-    int oBoard[9] = { -1, -1, -1, 0 , 0, 0, 0, 0, 0 };
-    int catBoard[9] = { -1, 1, -1, 1 , 1, -1, 1, -1, 1 };
+    int xBoard[9] = {1, 1, 1, 0, 0, 0, 0, 0, 0};
+    int oBoard[9] = {-1, -1, -1, 0, 0, 0, 0, 0, 0};
+    int catBoard[9] = {-1, 1, -1, 1, 1, -1, 1, -1, 1};
 
     printf("Cats Game Box Score\n");
     CuAssertIntEquals(tc, 0, scoreBox(catBoard, 1, 0));
@@ -244,11 +252,12 @@ void TestBoxScore(CuTest *tc) {
     CuAssertIntEquals(tc, 10, scoreBox(xBoard, 1, 0));
 
     printf("O Win This Move Box Score\n");
-    CuAssertIntEquals(tc, -10, scoreBox(oBoard, -1, 0));
+    CuAssertIntEquals(tc, 10, scoreBox(oBoard, -1, 0));
 
     printf("X Win 2 Moves out Box Score\n");
-    CuAssertIntEquals(tc, -8, scoreBox(xBoard, -1, 2));
+    CuAssertIntEquals(tc, 8, scoreBox(xBoard, -1, 2));
 }
+
 
 
 void ComputerTakesWin(CuTest *tc) {
@@ -333,11 +342,75 @@ void ComputerDoesNotChooseAlreadyPlayedBox(CuTest *tc) {
     tearDownTestGame();
 }
 
+void TestBoxScoresOneBoxLeft(CuTest *tc) {
+    printf("Box 1 is only box left.\n");
+    initTestGame(&game, 1);
+    game.currentPlayer = 1;
+    makeCatsGame();
+    game.board[1] = 0;
+
+    int score = scoreBoxes(game.board, 1, 0, &box);
+    CuAssertIntEquals(tc, 0, score);
+    tearDownTestGame();
+}
+
+void TestBoxScoresTwoBoxLeft(CuTest *tc) {
+    printf("Box 1 wins; Box 7 cat.\n");
+    initTestGame(&game, 1);
+    game.currentPlayer = -1;
+    game.board[0] = -1;
+    game.board[1] = 0;
+    game.board[2] = -1;
+    game.board[3] = -1;
+    game.board[4] = 1;
+    game.board[5] = 1;
+    game.board[6] = 1;
+    game.board[7] = 0;
+    game.board[8] = 1;
+
+    int scores[9];
+    for (int i = 1; i < 9; i++) {
+        if (game.board[i] == 0) {
+            game.board[i] = -1;
+            scores[i] = scoreBoxes(game.board, game.currentPlayer * -1, 0, &box);
+            game.board[i] = 0;
+        }
+    }
+    CuAssertIntEquals(tc, 10, scores[1]);
+    CuAssertIntEquals(tc, 0, scores[7]);
+
+    CuAssertIntEquals(tc, 10, scores[1]);
+    tearDownTestGame();
+}
+
+void TestBoxScores0(CuTest *tc) {
+    printf("Box 0 taken, Box 4 = 0; Rest = 5.\n");
+    initTestGame(&game, 1);
+    game.currentPlayer = -1;
+    game.board[0] = 1;
+    int scores[9];
+    for (int i = 1; i < 9; i++) {
+        game.board[i] = -1;
+        scores[i] = scoreBoxes(game.board, -1, 0, &box);
+        printf("box %i score = %i\n", i, scores[i]);
+        game.board[i] = 0;
+    }
+    CuAssertIntEquals(tc, 5, scores[1]);
+    CuAssertIntEquals(tc, 5, scores[2]);
+    CuAssertIntEquals(tc, 5, scores[3]);
+    CuAssertIntEquals(tc, 0, scores[4]);
+    CuAssertIntEquals(tc, 5, scores[5]);
+    CuAssertIntEquals(tc, 5, scores[6]);
+    CuAssertIntEquals(tc, 5, scores[7]);
+    CuAssertIntEquals(tc, 5, scores[8]);
+    tearDownTestGame();
+}
 
 CuSuite *GetSuite() {
     CuSuite *suite = CuSuiteNew();
     setSrand();
     SUITE_ADD_TEST(suite, TestPlayerPosition);
+    SUITE_ADD_TEST(suite, TestHumanBoxChoice);
     SUITE_ADD_TEST(suite, TestEmptyBoardNotGameOver);
     SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
     SUITE_ADD_TEST(suite, TestOneRowMixedNOTWin);
@@ -353,15 +426,14 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestComputerTurnX);
     SUITE_ADD_TEST(suite, TestComputerTurnO);
     SUITE_ADD_TEST(suite, TestBoxScore);
+    SUITE_ADD_TEST(suite, TestBoxScoresOneBoxLeft);
+    SUITE_ADD_TEST(suite, TestBoxScoresTwoBoxLeft);
+    SUITE_ADD_TEST(suite, TestBoxScores0);
     SUITE_ADD_TEST(suite, ComputerTakesWin);
     SUITE_ADD_TEST(suite, HumanMightWin);
     SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
     SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
     SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
-//    SUITE_ADD_TEST(suite, );
-//    SUITE_ADD_TEST(suite, );
-//    SUITE_ADD_TEST(suite, );
-//    SUITE_ADD_TEST(suite, );
 //    SUITE_ADD_TEST(suite, );
     return suite;
 }
