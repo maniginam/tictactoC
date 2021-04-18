@@ -440,7 +440,10 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
     SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
     SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
-//    SUITE_ADD_TEST(suite, );
+        SUITE_ADD_TEST(suite, TestBoxisOpen);
+    //    SUITE_ADD_TEST(suite, );
+    //    SUITE_ADD_TEST(suite, );
+    //    SUITE_ADD_TEST(suite, );
     return suite;
 }
 
