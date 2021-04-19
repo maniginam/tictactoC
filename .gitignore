@@ -5,6 +5,10 @@
 a.out
 *.h.gch
 
+#in-progress files
+ai.c
+ai.h
+
 #cmake
 cmake-build-debug
 cmake-build-release
