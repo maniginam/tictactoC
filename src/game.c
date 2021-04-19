@@ -105,10 +105,8 @@ int scoreBoxes(int *board, int player, int depth, int *box, int human) {
                 int boxScore = scoreBoxes(board, -1 * player, depth, &thisBox, human);
                 scores[i] = boxScore;
                 board[i] = 0;
-                drawBoard(board);
-                printf("box %i score = %i\n", i, boxScore);
                 if (player == 1) {
-                    if (boxScore > score) {
+                    if (boxScore < score) {
                         score = boxScore;
                     }
                 } else if (player == -1) {
