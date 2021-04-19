@@ -35,7 +35,6 @@ void TestPlayerPosition(CuTest *tc) {
 void TestHumanBoxChoice(CuTest *tc) {
     CuAssertTrue(tc, validBox(7));
     CuAssertTrue(tc, !validBox(10));
-//    CuAssertTrue(tc, !validBox(Z));
 }
 
 void TestBoxisOpen(CuTest *tc) {

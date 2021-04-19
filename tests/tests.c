@@ -4,6 +4,7 @@
 #include "CuTest.h"
 #include "game-test.h"
 #include "helper.h"
+#include "messages-test.h"
 #include "../src/game.h"
 #include "../src/messages.h"
 
