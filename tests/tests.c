@@ -415,14 +415,15 @@ void TestBoxScores78Left(CuTest *tc) {
 
 
 void TestBoxScores0(CuTest *tc) {
-    printf("Box 0 taken, Box 4 = 0; Rest = 5.\n");
+    printf("Box 0 taken\n");
     initTestGame(&game, 1);
     game.currentPlayer = -1;
     game.board[0] = 1;
     int scores[9];
     for (int i = 1; i < 9; i++) {
         game.board[i] = -1;
-        scores[i] = scoreBoxes(game.board, -1, 0, &box, 1);
+        printf("box %i score = %i\n", i, scores[i]);
+        scores[i] = scoreBoxes(game.board, 1, 0, &box, 1);
         game.board[i] = 0;
     }
     CuAssertIntEquals(tc, 0, scores[1]);
