@@ -5,8 +5,6 @@
 #include "messages-test.h"
 #include "../src/messages.h"
 
-int isBoxGood, corners[4] = {0, 2, 6, 8};
-
 void TestPlayerPosition(CuTest *tc) {
     printf("Player Position: \n");
     char littleX[] = "x";

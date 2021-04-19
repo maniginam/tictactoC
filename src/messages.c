@@ -13,7 +13,6 @@ int parseSelection(char *input) {
 
 int offerPosition(char *input) {
     printf("X or O?\n");
-//    fgets(input, 32, stdin);
     scanf("%s", input);
     return parseSelection(input);
 }
