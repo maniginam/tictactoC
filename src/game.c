@@ -106,7 +106,7 @@ int scoreBoxes(int *board, int player, int depth, int *box, int human) {
                 scores[i] = boxScore;
                 board[i] = 0;
                 if (player == 1) {
-                    if (boxScore < score) {
+                    if (boxScore > score) {
                         score = boxScore;
                     }
                 } else if (player == -1) {
