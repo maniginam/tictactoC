@@ -16,5 +16,5 @@ The tests us CuTest, whic is included as a part of this repository.
 #Run TicTacToc
 *   Compile
     *    gcc ./src/main.c ./src/game.c ./src/game.h ./src/messages.c ./src/messages.h   
-* Run
+*   Run
     *   ./a.out

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "CuTest.h"
-#include "../src/ai.h"
 #include "../src/game.h"
 #include "../src/messages.h"
 
@@ -252,16 +251,16 @@ void TestBoxScore(CuTest *tc) {
     int catBoard[9] = {-1, 1, -1, 1, 1, -1, 1, -1, 1};
 
     printf("Cats Game Box Score\n");
-    CuAssertIntEquals(tc, 0, scoreBox(catBoard, 1, 0));
+    CuAssertIntEquals(tc, 0, scoreBox(catBoard, 0));
 
     printf("X Win This Move Box Score\n");
-    CuAssertIntEquals(tc, 10, scoreBox(xBoard, 1, 0));
+    CuAssertIntEquals(tc, 10, scoreBox(xBoard, 0));
 
     printf("O Win This Move Box Score\n");
-    CuAssertIntEquals(tc, 10, scoreBox(oBoard, -1, 0));
+    CuAssertIntEquals(tc, 10, scoreBox(oBoard, 0));
 
     printf("X Win 2 Moves out Box Score\n");
-    CuAssertIntEquals(tc, 8, scoreBox(xBoard, -1, 2));
+    CuAssertIntEquals(tc, 8, scoreBox(xBoard, 2));
 }
 
 
@@ -404,12 +403,12 @@ void TestBoxScores78Left(CuTest *tc) {
     for (int i = 1; i < 9; i++) {
         if (game.board[i] == 0) {
             game.board[i] = -1;
-            scores[i] = scoreBoxes(game.board, game.currentPlayer * -1, 0, &box, 1);
+            scores[i] = scoreBoxes(game.board, 1, 1, &box, 1);
             game.board[i] = 0;
         }
     }
     CuAssertIntEquals(tc, 0, scores[7]);
-    CuAssertIntEquals(tc, -9, scores[8]);
+    CuAssertIntEquals(tc, 8, scores[8]);
     tearDownTestGame();
 }
 
@@ -440,33 +439,33 @@ void TestBoxScores0(CuTest *tc) {
 CuSuite *GetSuite() {
     CuSuite *suite = CuSuiteNew();
     setSrand();
-    SUITE_ADD_TEST(suite, TestPlayerPosition);
-    SUITE_ADD_TEST(suite, TestHumanBoxChoice);
-    SUITE_ADD_TEST(suite, TestBoxisOpen);
-    SUITE_ADD_TEST(suite, TestEmptyBoardNotGameOver);
-    SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
-    SUITE_ADD_TEST(suite, TestOneRowMixedNOTWin);
-    SUITE_ADD_TEST(suite, TestCatsGameOver);
-    SUITE_ADD_TEST(suite, TestGameOverXWinsTopRow);
-    SUITE_ADD_TEST(suite, TestGameOverOWinsLastColumn);
-    SUITE_ADD_TEST(suite, TestDiagLtTopToRtBotXISWin);
-    SUITE_ADD_TEST(suite, TestDiagRtTopToLtBotOISWin);
-    SUITE_ADD_TEST(suite, TestHumanTurnX);
-    SUITE_ADD_TEST(suite, TestHumanTurnO);
-    SUITE_ADD_TEST(suite, TestHumanXWin);
-    SUITE_ADD_TEST(suite, TestComputerOWin);
-    SUITE_ADD_TEST(suite, TestComputerTurnX);
-    SUITE_ADD_TEST(suite, TestComputerTurnO);
-    SUITE_ADD_TEST(suite, TestBoxScore);
-    SUITE_ADD_TEST(suite, TestBoxScoresOneBoxLeft);
-    SUITE_ADD_TEST(suite, TestBoxScoresTwoBoxLeft);
-    SUITE_ADD_TEST(suite, TestBoxScores78Left);
+//    SUITE_ADD_TEST(suite, TestPlayerPosition);
+//    SUITE_ADD_TEST(suite, TestHumanBoxChoice);
+//    SUITE_ADD_TEST(suite, TestBoxisOpen);
+//    SUITE_ADD_TEST(suite, TestEmptyBoardNotGameOver);
+//    SUITE_ADD_TEST(suite, TestOneBoxFilledBoardNOTWin);
+//    SUITE_ADD_TEST(suite, TestOneRowMixedNOTWin);
+//    SUITE_ADD_TEST(suite, TestCatsGameOver);
+//    SUITE_ADD_TEST(suite, TestGameOverXWinsTopRow);
+//    SUITE_ADD_TEST(suite, TestGameOverOWinsLastColumn);
+//    SUITE_ADD_TEST(suite, TestDiagLtTopToRtBotXISWin);
+//    SUITE_ADD_TEST(suite, TestDiagRtTopToLtBotOISWin);
+//    SUITE_ADD_TEST(suite, TestHumanTurnX);
+//    SUITE_ADD_TEST(suite, TestHumanTurnO);
+//    SUITE_ADD_TEST(suite, TestHumanXWin);
+//    SUITE_ADD_TEST(suite, TestComputerOWin);
+//    SUITE_ADD_TEST(suite, TestComputerTurnX);
+//    SUITE_ADD_TEST(suite, TestComputerTurnO);
+//    SUITE_ADD_TEST(suite, TestBoxScore);
+//    SUITE_ADD_TEST(suite, TestBoxScoresOneBoxLeft);
+//    SUITE_ADD_TEST(suite, TestBoxScoresTwoBoxLeft);
+//    SUITE_ADD_TEST(suite, TestBoxScores78Left);
     SUITE_ADD_TEST(suite, TestBoxScores0);
-    SUITE_ADD_TEST(suite, ComputerTakesWin);
-    SUITE_ADD_TEST(suite, HumanMightWin);
-    SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
-    SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
-    SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
+//    SUITE_ADD_TEST(suite, ComputerTakesWin);
+//    SUITE_ADD_TEST(suite, HumanMightWin);
+//    SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
+//    SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
+//    SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
     //    SUITE_ADD_TEST(suite, );
     //    SUITE_ADD_TEST(suite, );
     return suite;

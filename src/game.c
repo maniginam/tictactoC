@@ -53,7 +53,9 @@ int makeBestMove(struct gameStatus *game, int *box) {
     if (isEmpty(game->board)) {
         pickCorner(box);
     } else {
-        int score = 0;
+        int score;
+        if (game->currentPlayer == 1) { score = -10; }
+        else { score = 10; }
         for (int i = 0; i < BOARDSIZE; ++i) {
             if (game->board[i] == 0) {
                 game->board[i] = game->currentPlayer;
@@ -61,15 +63,15 @@ int makeBestMove(struct gameStatus *game, int *box) {
                     *box = i;
                     return *box;
                 } else {
-                    int depth = 0;
+                    int depth = 1;
                     int boxScore = scoreBoxes(game->board, game->currentPlayer * -1, depth, box, game->humanToken);
                     if (game->currentPlayer == 1) {
-                        if (boxScore >= score) {
+                        if (boxScore > score) {
                             score = boxScore;
                             *box = i;
                         }
                     } else {
-                        if (boxScore <= score) {
+                        if (boxScore < score) {
                             score = boxScore;
                             *box = i;
                         }
@@ -82,38 +84,74 @@ int makeBestMove(struct gameStatus *game, int *box) {
     return *box;
 }
 
+int maxBox(int *scores);
+
+int minBox(int *scores);
+
 int scoreBoxes(int *board, int player, int depth, int *box, int human) {
+    int scores[BOARDSIZE];
     if (isGameOver(board)) {
-        int boxScore = scoreBox(board, player, depth);
+        int boxScore = scoreBox(board, depth);
         return boxScore * player;
     } else {
         depth++;
-        int score = 0;
-        for (int i = 0; i < BOARDSIZE; ++i) {
+        int thisBox;
+        int score;
+        if (player == 1) { score = -10; }
+        else { score = 10; }
+        for (int i = 0; i < 3; ++i) {
             if (board[i] == 0) {
                 board[i] = player;
-                int boxScore = scoreBoxes(board, -1 * player, depth, box, human);
+                int boxScore = scoreBoxes(board, -1 * player, depth, &thisBox, human);
+                scores[i] = boxScore;
+                board[i] = 0;
+                drawBoard(board);
+                printf("box %i score = %i\n", i, boxScore);
                 if (player == 1) {
-                    if (boxScore < score) {
-                        score = boxScore;
-                    }
-                } else {
                     if (boxScore > score) {
                         score = boxScore;
                     }
+                } else if (player == -1) {
+                    if (boxScore < score)
+                        score = boxScore;
                 }
                 board[i] = 0;
             }
         }
         return score;
     }
+
 }
 
-int scoreBox(int *board, int player, int depth) {
+int scoreBox(int *board, int depth) {
     if (isWin(board)) {
         return (10 - depth);
     } else { return 0; }
 }
+
+int maxBox(int *scores) {
+    int max = scores[0];
+    for (int i = 1; i < BOARDSIZE; i++) {
+        if (scores[i] != 1 && scores[i] != -1 && scores[i] > max) {
+            max = scores[i];
+        }
+    }
+    return max;
+}
+
+int minBox(int *scores) {
+//    for (int i = 0; i < 9; ++i) {
+//        printf("score %i = %i\n", i, scores[i]);
+//    }
+    int min = scores[0];
+    for (int i = 1; i < BOARDSIZE; i++) {
+        if (scores[i] != 1 && scores[i] != -1 && scores[i] < min) {
+            min = scores[i];
+        }
+    }
+    return min;
+}
+
 
 void pickCorner(int *box) {
     int corners[4] = {0, 2, 6, 8};
