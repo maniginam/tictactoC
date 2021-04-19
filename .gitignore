@@ -9,6 +9,8 @@ a.out
 cmake-build-debug
 cmake-build-release
 CMake*
+CMakeLists.txt
+Makefile
 
 #gradle
 *.gradle
