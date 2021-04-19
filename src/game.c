@@ -90,15 +90,15 @@ int minBox(int *scores);
 
 int scoreBoxes(int *board, int player, int depth, int *box, int human) {
     int scores[BOARDSIZE];
+        int score;
+        if (player == 1) { score = -10; }
+        else { score = 10; }
     if (isGameOver(board)) {
         int boxScore = scoreBox(board, depth);
         return boxScore * player;
     } else {
         depth++;
         int thisBox;
-        int score;
-        if (player == 1) { score = -10; }
-        else { score = 10; }
         for (int i = 0; i < 3; ++i) {
             if (board[i] == 0) {
                 board[i] = player;
