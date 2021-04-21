@@ -156,16 +156,88 @@ void confirmCornerBox() {
     }
 }
 
-void TestComputerTurnX(CuTest *tc) {
+void TestComputerEmptyBoard(CuTest *tc) {
     printf("Computer Turn X\n");
-    initTestGame(&game, 1);
-    game.humanToken = -1;
+    initTestGame(&game, -1);
     getBox(&game, &box);
     play_game(&game, &box);
     confirmCornerBox();
     CuAssertTrue(tc, isBoxGood);
     CuAssertIntEquals(tc, -1, game.currentPlayer);
     CuAssertIntEquals(tc, 1, game.board[box]);
+    tearDownTestGame();
+}
+
+void getTestBoard(int *board) {
+    int testBoard[9] = {1, -1, 1, 1, -1, -1, -1, 1, 1};
+    for (int i = 0; i < 9; ++i) {
+        board[i] = testBoard[i];
+    }
+}
+
+void TestComputerOneBoxLeft(CuTest *tc) {
+    printf("Computer One Box Left\n");
+    initTestGame(&game, -1);
+    getBox(&game, &box);
+    play_game(&game, &box);
+    confirmCornerBox();
+    CuAssertTrue(tc, isBoxGood);
+    CuAssertIntEquals(tc, -1, game.currentPlayer);
+    CuAssertIntEquals(tc, 1, game.board[box]);
+    tearDownTestGame();
+}
+
+void TestScoresOneBoxLeft(CuTest *tc) {
+    printf("Scores One Box Left\n");
+    initTestGame(&game, -1);
+    getTestBoard(game.board);
+    game.board[3] = 0;
+    int score = scoreBoxes(game.board, 1, 0, &box, -1);
+    CuAssertIntEquals(tc, 0, score);
+    tearDownTestGame();
+}
+
+void TestScoresOTwoBoxesLeft(CuTest *tc) {
+    printf("Scores Two Boxes Left\n");
+    initTestGame(&game, 1);
+    game.currentPlayer = -1;
+    getTestBoard(game.board);
+    game.board[3] = 0;
+    game.board[5] = 0;
+    int scores[9];
+
+    for (int i = 0; i < 9; ++i) {
+        if (game.board[i] == 0) {
+            game.board[i] = game.currentPlayer;
+            scores[i] = scoreBoxes(game.board, 1, 1, &box, -1);
+            game.board[i] = 0;
+        }
+    }
+    CuAssertIntEquals(tc, 0, scores[5]);
+    CuAssertIntEquals(tc, 9, scores[3]);
+    tearDownTestGame();
+}
+
+void TestScoresOThreeBoxesLeft(CuTest *tc) {
+    printf("Scores Three Boxes Left\n");
+    initTestGame(&game, 1);
+    game.currentPlayer = 1;
+    getTestBoard(game.board);
+    game.board[3] = 0;
+    game.board[5] = 0;
+    game.board[2] = 0;
+    int scores[9];
+
+    for (int i = 0; i < 9; ++i) {
+        if (game.board[i] == 0) {
+            game.board[i] = game.currentPlayer;
+            scores[i] = scoreBoxes(game.board, -1, 1, &box, -1);
+            game.board[i] = 0;
+        }
+    }
+    CuAssertIntEquals(tc, 0, scores[2]);
+    CuAssertIntEquals(tc, -9, scores[3]);
+    CuAssertIntEquals(tc, -9, scores[5]);
     tearDownTestGame();
 }
 

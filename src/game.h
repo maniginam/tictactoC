@@ -15,6 +15,8 @@ void play_game(struct gameStatus *game, int *box);
 
 int scoreBoxes(int *board, int player, int depth, int *box, int human);
 int scoreBox(int *board, int depth);
+int maxBox(int *scores);
+int minBox(int *scores);
 
 int isGameOver(int *board);
 int isWin(int *board);

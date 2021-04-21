@@ -21,8 +21,10 @@ void TestHumanTurnO(CuTest *tc);
 void TestHumanXWin(CuTest *tc);
 void TestComputerOWin(CuTest *tc);
 void confirmCornerBox();
-void TestComputerTurnX(CuTest *tc);
-void TestComputerTurnO(CuTest *tc);
+void TestComputerEmptyBoard(CuTest *tc);
+void TestScoresOneBoxLeft(CuTest *tc);
+void TestScoresOTwoBoxesLeft(CuTest *tc);
+void TestScoresOThreeBoxesLeft(CuTest *tc);
 void TestBoxScore(CuTest *tc);
 void ComputerTakesWin(CuTest *tc);
 void HumanMightWin(CuTest *tc);
@@ -32,7 +34,6 @@ void ComputerDoesNotChooseAlreadyPlayedBox(CuTest *tc);
 void TestBoxScoresOneBoxLeft(CuTest *tc);
 void TestBoxScoresTwoBoxLeft(CuTest *tc);
 void TestBoxScores78Left(CuTest *tc);
-void TestBoxScores0(CuTest *tc);
 
 
 #endif //TICTACTOC_GAME_TEST_H
