@@ -75,14 +75,10 @@ int scoreBoxes(int *board, int player, int depth, int *box, int human) {
                 if (player == -1) {
                     if (boxScore < score) {
                         score = boxScore;
-                        printf("box %i has score %i\n", i, boxScore);
                     }
                 } else {
-                    printf("boxScore = %i\n", boxScore);
-                    printf("score = %i\n", score);
                     if (boxScore > score) {
                         score = boxScore;
-                        printf("box %i has score %i\n", i, boxScore);
                     }
                 }
             }

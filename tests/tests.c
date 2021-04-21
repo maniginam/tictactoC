@@ -30,11 +30,12 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestComputerOWin);
     SUITE_ADD_TEST(suite, TestComputerEmptyBoard);
     SUITE_ADD_TEST(suite, TestScoresOneBoxLeft);
-    SUITE_ADD_TEST(suite, TestScoresOTwoBoxesLeft);
-    SUITE_ADD_TEST(suite, TestScoresOThreeBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresTwoBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresThreeBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresFourBoxesLeft);
+//    SUITE_ADD_TEST(suite, TestScoresFiveBoxesLeft);
 
 //    SUITE_ADD_TEST(suite, TestBoxScore);
-//    SUITE_ADD_TEST(suite, TestBoxScoresOneBoxLeft);
 //    SUITE_ADD_TEST(suite, TestBoxScoresTwoBoxLeft);
 //    SUITE_ADD_TEST(suite, TestBoxScores78Left);
 //    SUITE_ADD_TEST(suite, ComputerTakesWin);

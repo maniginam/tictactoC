@@ -23,8 +23,13 @@ void TestComputerOWin(CuTest *tc);
 void confirmCornerBox();
 void TestComputerEmptyBoard(CuTest *tc);
 void TestScoresOneBoxLeft(CuTest *tc);
-void TestScoresOTwoBoxesLeft(CuTest *tc);
-void TestScoresOThreeBoxesLeft(CuTest *tc);
+void TestScoresTwoBoxesLeft(CuTest *tc);
+void TestScoresThreeBoxesLeft(CuTest *tc);
+void TestScoresFourBoxesLeft(CuTest *tc);
+void TestScoresFiveBoxesLeft(CuTest *tc);
+
+
+
 void TestBoxScore(CuTest *tc);
 void ComputerTakesWin(CuTest *tc);
 void HumanMightWin(CuTest *tc);
