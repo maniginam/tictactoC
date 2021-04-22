@@ -78,6 +78,7 @@ int scoreBoxes(int *board, int player, int depth, int *box, int human) {
                     }
                 } else {
                     if (boxScore > score) {
+
                         score = boxScore;
                     }
                 }
