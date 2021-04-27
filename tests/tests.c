@@ -32,17 +32,15 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestScoresOneBoxLeft);
     SUITE_ADD_TEST(suite, TestScoresTwoBoxesLeft);
     SUITE_ADD_TEST(suite, TestScoresThreeBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresThreeBoxesLeftWMistake);
     SUITE_ADD_TEST(suite, TestScoresFourBoxesLeft);
-//    SUITE_ADD_TEST(suite, TestScoresFiveBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresFiveBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresSixBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresSevenBoxesLeft);
+    SUITE_ADD_TEST(suite, TestScoresEightBoxesLeft);
 
-//    SUITE_ADD_TEST(suite, TestBoxScore);
-//    SUITE_ADD_TEST(suite, TestBoxScoresTwoBoxLeft);
-//    SUITE_ADD_TEST(suite, TestBoxScores78Left);
-//    SUITE_ADD_TEST(suite, ComputerTakesWin);
-//    SUITE_ADD_TEST(suite, HumanMightWin);
-//    SUITE_ADD_TEST(suite, ComputerShouldNOTTakeCenterOrCornerBox);
-//    SUITE_ADD_TEST(suite, ComputerSHOULDTakeCenterBox);
-//    SUITE_ADD_TEST(suite, ComputerDoesNotChooseAlreadyPlayedBox);
+    SUITE_ADD_TEST(suite, TestBoxScore);
+
     //    SUITE_ADD_TEST(suite, );
     //    SUITE_ADD_TEST(suite, );
     return suite;

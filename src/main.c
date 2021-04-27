@@ -27,7 +27,6 @@ void initGame(struct gameStatus *game) {
 
 int main() {
     struct gameStatus game;
-    printf("hello");
     setSrand();
     initGame(&game);
     run_game(&game);

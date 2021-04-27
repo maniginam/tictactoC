@@ -18,11 +18,11 @@ void setSrand() { srand(time(0)); }
 
 int BOARDSIZE = 9;
 
-int makeBestMove(struct gameStatus *game, int *box);
+int makeBestMove(struct gameStatus *game);
 
 int isEmpty(int *board);
 
-void pickCorner(int *box);
+int pickCorner();
 
 void run_game(struct gameStatus *game) {
     game->board = malloc(BOARDSIZE * sizeof(int));
@@ -46,32 +46,54 @@ void play_game(struct gameStatus *game, int *box) {
 void getBox(struct gameStatus *game, int *box) {
     if (game->currentPlayer == game->humanToken) {
         promptForBox(game->board, box);
-    } else { *box = makeBestMove(game, box); }
+    } else { *box = makeBestMove(game); }
 }
 
-int makeBestMove(struct gameStatus *game, int *box) {
+int makeBestMove(struct gameStatus *game) {
+    int bestBox;
     if (isEmpty(game->board)) {
-        pickCorner(box);
+        bestBox = pickCorner();
     } else {
+        int score = 10 * game->currentPlayer;
+        for (int i = 0; i < BOARDSIZE; ++i) {
+            int boxScore;
+            if (game->board[i] == 0) {
+                game->board[i] = game->currentPlayer;
+                boxScore = scoreBoxes(game->board, game->currentPlayer * -1, 0);
+                if (game->currentPlayer == -1) {
+                    if (boxScore > score) {
+                        score = boxScore;
+                        bestBox = i;
+                    }
+                } else {
+                    if (boxScore < score) {
+                        score = boxScore;
+                        bestBox = i;
+                    }
+                }
+                game->board[i] = 0;
+            }
+        }
     }
-    return *box;
+    return bestBox;
 }
 
 
-int scoreBoxes(int *board, int player, int depth, int *box, int human) {
-    int score = 10;
-    for (int i = 0; i < BOARDSIZE; ++i) {
-        int boxScore;
-        if (board[i] == 0) {
-            board[i] = player;
-            if (isGameOver(board)) {
-                if (isWin(board)) {
-                    score = (10 - depth) * player;
-                } else {
-                    score = 0;
-                }
-            } else {
-                boxScore = scoreBoxes(board, player * -1, depth++, box, human);
+int scoreBoxes(int *board, int player, int depth) {
+    int score = -10 * player;
+    if (isGameOver(board)) {
+        if (isWin(board)) {
+            score = (depth - 10) * player;
+        } else {
+            score = 0;
+        }
+    } else {
+        depth++;
+        for (int i = 0; i < BOARDSIZE; ++i) {
+            int boxScore;
+            if (board[i] == 0) {
+                board[i] = player;
+                boxScore = scoreBoxes(board, player * -1, depth);
                 if (player == -1) {
                     if (boxScore < score) {
                         score = boxScore;
@@ -81,8 +103,8 @@ int scoreBoxes(int *board, int player, int depth, int *box, int human) {
                         score = boxScore;
                     }
                 }
+                board[i] = 0;
             }
-            board[i] = 0;
         }
     }
     return score;
@@ -117,10 +139,10 @@ int minBox(int *scores) {
     return min;
 }
 
-void pickCorner(int *box) {
+int pickCorner() {
     int corners[4] = {0, 2, 6, 8};
     int r = (rand() % 4);
-    *box = corners[r];
+    return corners[r];
 }
 
 int isGameOver(int *board) {
