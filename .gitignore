@@ -10,11 +10,10 @@ ai.c
 ai.h
 
 #cmake
-cmake-build-debug
-cmake-build-release
-CMake*
-CMakeLists.txt
-Makefile
+cmake-build-debug*
+cmake-build-release*
+*.cmake
+target/*
 
 #gradle
 *.gradle

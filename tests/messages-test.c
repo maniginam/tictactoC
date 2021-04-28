@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "CuTest.h"
 #include "messages-test.h"
-#include "../src/messages.h"
+#include "../tictactoC/messages.h"
 
 void TestPlayerPosition(CuTest *tc) {
     printf("Player Position: \n");

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "game.h"
 #include "messages.h"
+#include "tictactoCConfig.h"
 
 struct gameStatus;
 
@@ -33,4 +34,3 @@ int main() {
     printWinner(game.winner, game.humanToken);
     free(game.board);
 }
-

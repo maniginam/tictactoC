@@ -4,8 +4,8 @@
 #include "CuTest.h"
 #include "game-test.h"
 #include "helper.h"
-#include "../src/game.h"
-#include "../src/messages.h"
+#include "../tiCtaCtoC/game.h"
+#include "../tiCtaCtoC/messages.h"
 
 int isBoxGood, corners[4] = {0, 2, 6, 8};
 

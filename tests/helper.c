@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "CuTest.h"
-#include "../src/game.h"
+#include "../tictactoC/game.h"
 #include "helper.h"
 
 struct gameStatus game;
