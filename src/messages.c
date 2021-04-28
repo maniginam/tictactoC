@@ -28,17 +28,15 @@ void drawBoard(int *board) {
     printf("\n");
 }
 
-void promptForBox(int *board, int *box) {
-    char input[sizeof(int)];
+int promptForBox(int *board) {
     printf("It's your turn.\n Select a Box 0-8\n");
-//    fgets(input, sizeof(int), stdin);
     int selection;
     if(scanf("%d", &selection) != 1) { printf("Not valid entry\n"); }
     if (validBox(selection) && boxOpen(board, selection)) {
-        *box = selection;
+        return selection;
     } else {
         printf("Not Valid Box\n");
-        promptForBox(box, board);
+        return promptForBox(board);
     }
 }
 
@@ -50,8 +48,6 @@ int boxOpen(int *board, int box) {
 
 int validBox(int selection) {
     int valid = false;
-    char *board[9] = {"0", "1", "2", "3", "4", "5", "6", "7", "8",};
-//    int board[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8,};
     for (int i = 0; i < 9; i++) {
         if (selection == i) {
             valid = 1;

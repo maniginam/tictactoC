@@ -9,7 +9,7 @@
 
 int isBoxGood, corners[4] = {0, 2, 6, 8};
 
-void confirmCornerBox() {
+void confirmCornerBox(int box) {
     for (int i = 0; i < 4; i++) {
         if (box == corners[i]) { isBoxGood = 1; }
     }
@@ -99,9 +99,9 @@ void TestDiagRtTopToLtBotOISWin(CuTest *tc) {
 
 void TestHumanTurnX(CuTest *tc) {
     printf("Human Turn X: \n");
-    box = 0;
+    int box = 0;
     initTestGame(&game, 1);
-    play_game(&game, &box);
+    play_game(&game, box);
     CuAssertIntEquals(tc, 1, game.humanToken);
     CuAssertIntEquals(tc, -1, game.currentPlayer);
     CuAssertIntEquals(tc, 1, game.board[0]);
@@ -112,12 +112,12 @@ void TestHumanTurnX(CuTest *tc) {
 
 void TestHumanTurnO(CuTest *tc) {
     printf("Human Turn O: \n");
-    box = 4;
+    int box = 4;
     initTestGame(&game, 1);
     game.humanToken = -1;
     game.board[0] = 1;
     game.currentPlayer = -1;
-    play_game(&game, &box);
+    play_game(&game, box);
     CuAssertIntEquals(tc, -1, game.humanToken);
     CuAssertIntEquals(tc, 1, game.currentPlayer);
     CuAssertIntEquals(tc, 1, game.board[0]);
@@ -129,11 +129,11 @@ void TestHumanTurnO(CuTest *tc) {
 
 void TestHumanXWin(CuTest *tc) {
     printf("Human Wins as X: \n");
-    box = 2;
+    int box = 2;
     initTestGame(&game, 1);
     game.board[0] = 1;
     game.board[1] = 1;
-    play_game(&game, &box);
+    play_game(&game, box);
     CuAssertIntEquals(tc, 1, game.board[2]);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
@@ -143,12 +143,12 @@ void TestHumanXWin(CuTest *tc) {
 
 void TestComputerOWin(CuTest *tc) {
     printf("Computer Wins as O: \n");
-    box = 3;
+    int box = 3;
     initTestGame(&game, 1);
     game.board[4] = -1;
     game.board[5] = -1;
     game.currentPlayer = -1;
-    play_game(&game, &box);
+    play_game(&game, box);
     CuAssertIntEquals(tc, -1, game.board[3]);
     CuAssertTrue(tc, isGameOver(game.board));
     CuAssertTrue(tc, isWin(game.board));
@@ -159,9 +159,9 @@ void TestComputerOWin(CuTest *tc) {
 void TestComputerEmptyBoard(CuTest *tc) {
     printf("Computer Turn X\n");
     initTestGame(&game, -1);
-    getBox(&game, &box);
-    play_game(&game, &box);
-    confirmCornerBox();
+    int box = getBox(&game);
+    play_game(&game, box);
+    confirmCornerBox(box);
     CuAssertTrue(tc, isBoxGood);
     CuAssertIntEquals(tc, -1, game.currentPlayer);
     CuAssertIntEquals(tc, 1, game.board[box]);
@@ -189,9 +189,8 @@ void TestBoxScore(CuTest *tc) {
 void TestComputerOneBoxLeft(CuTest *tc) {
     printf("Computer One Box Left\n");
     initTestGame(&game, -1);
-    getBox(&game, &box);
-    play_game(&game, &box);
-    confirmCornerBox();
+    int box = getBox(&game);
+    play_game(&game, box);
     CuAssertTrue(tc, isBoxGood);
     CuAssertIntEquals(tc, -1, game.currentPlayer);
     CuAssertIntEquals(tc, 1, game.board[box]);
@@ -443,7 +442,7 @@ void TestShouldTakeWin(CuTest *tc) {
     CuAssertIntEquals(tc, -9, scores[3]);
     CuAssertIntEquals(tc, -9, scores[5]);
     CuAssertIntEquals(tc, -9, scores[7]);
-    box = makeBestMove(&game);
+    int box = makeBestMove(&game);
     CuAssertIntEquals(tc, 4, box);
     tearDownTestGame();
 }

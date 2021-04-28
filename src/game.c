@@ -4,7 +4,10 @@
 #include "messages.h"
 #include <printf.h>
 
-
+void setSrand() { srand(time(0)); }
+int BOARDSIZE = 9;
+int isEmpty(int *board);
+int pickCorner();
 int wins[9][3] = {{0, 1, 2},
                   {3, 4, 5},
                   {6, 7, 8},
@@ -14,38 +17,32 @@ int wins[9][3] = {{0, 1, 2},
                   {0, 4, 8},
                   {2, 4, 6}};
 
-void setSrand() { srand(time(0)); }
-
-int BOARDSIZE = 9;
-
-int isEmpty(int *board);
-
-int pickCorner();
-
 void run_game(struct gameStatus *game) {
     game->board = malloc(BOARDSIZE * sizeof(int));
     while (!isGameOver(game->board)) {
         int box;
-        getBox(game, &box);
-        play_game(game, &box);
+        box = getBox(game);
+        play_game(game, box);
         if (game->currentPlayer == game->humanToken) {
             drawBoard(game->board);
         }
     }
+    drawBoard(game->board);
 }
 
-void play_game(struct gameStatus *game, int *box) {
-    game->board[*box] = game->currentPlayer;
+int getBox(struct gameStatus *game) {
+    if (game->currentPlayer == game->humanToken) {
+        return promptForBox(game->board);
+    } else { return makeBestMove(game); }
+}
+
+void play_game(struct gameStatus *game, int box) {
+    game->board[box] = game->currentPlayer;
     if (isWin(game->board)) {
         game->winner = game->currentPlayer;
     } else { game->currentPlayer = -1 * game->currentPlayer; }
 }
 
-void getBox(struct gameStatus *game, int *box) {
-    if (game->currentPlayer == game->humanToken) {
-        promptForBox(game->board, box);
-    } else { *box = makeBestMove(game); }
-}
 
 int makeBestMove(struct gameStatus *game) {
     int bestBox;
