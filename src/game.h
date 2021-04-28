@@ -13,6 +13,7 @@ void run_game(struct gameStatus *game);
 void getBox(struct gameStatus *game, int *box);
 void play_game(struct gameStatus *game, int *box);
 
+int makeBestMove(struct gameStatus *game);
 int scoreBoxes(int *board, int player, int depth);
 int scoreBox(int *board, int depth);
 int maxBox(int *scores);

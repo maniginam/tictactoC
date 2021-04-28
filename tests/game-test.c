@@ -9,6 +9,12 @@
 
 int isBoxGood, corners[4] = {0, 2, 6, 8};
 
+void confirmCornerBox() {
+    for (int i = 0; i < 4; i++) {
+        if (box == corners[i]) { isBoxGood = 1; }
+    }
+}
+
 void TestEmptyBoardNotGameOver(CuTest *tc) {
     printf("Not Game Over: \n");
     initTestGame(&game, 1);
@@ -150,12 +156,6 @@ void TestComputerOWin(CuTest *tc) {
     tearDownTestGame();
 }
 
-void confirmCornerBox() {
-    for (int i = 0; i < 4; i++) {
-        if (box == corners[i]) { isBoxGood = 1; }
-    }
-}
-
 void TestComputerEmptyBoard(CuTest *tc) {
     printf("Computer Turn X\n");
     initTestGame(&game, -1);
@@ -168,11 +168,22 @@ void TestComputerEmptyBoard(CuTest *tc) {
     tearDownTestGame();
 }
 
-void getTestBoard(int *board) {
-    int testBoard[9] = {1, -1, 1, 1, -1, -1, -1, 1, 1};
-    for (int i = 0; i < 9; ++i) {
-        board[i] = testBoard[i];
-    }
+void TestBoxScore(CuTest *tc) {
+    int xBoard[9] = {1, 1, 1, 0, 0, 0, 0, 0, 0};
+    int oBoard[9] = {-1, -1, -1, 0, 0, 0, 0, 0, 0};
+    int catBoard[9] = {-1, 1, -1, 1, 1, -1, 1, -1, 1};
+
+    printf("Cats Game Box Score\n");
+    CuAssertIntEquals(tc, 0, scoreBox(catBoard, 0));
+
+    printf("X Win This Move Box Score\n");
+    CuAssertIntEquals(tc, 10, scoreBox(xBoard, 0));
+
+    printf("O Win This Move Box Score\n");
+    CuAssertIntEquals(tc, 10, scoreBox(oBoard, 0));
+
+    printf("X Win 2 Moves out Box Score\n");
+    CuAssertIntEquals(tc, 8, scoreBox(xBoard, 2));
 }
 
 void TestComputerOneBoxLeft(CuTest *tc) {
@@ -410,36 +421,29 @@ void TestScoresEightBoxesLeft(CuTest *tc) {
     tearDownTestGame();
 }
 
-
-void TestComputerTurnO(CuTest *tc) {
-    printf("Computer Turn O\n");
-    initTestGame(&game, 1);
-    game.humanToken = 1;
-    game.currentPlayer = -1;
+void TestShouldTakeWin(CuTest *tc) {
+    printf("Scores Five Boxes Left\n");
+    initTestGame(&game, -1);
+    game.currentPlayer = 1;
     game.board[0] = 1;
-    getBox(&game, &box);
-    play_game(&game, &box);
-    confirmCornerBox();
-    CuAssertTrue(tc, isBoxGood);
-    CuAssertIntEquals(tc, 1, game.currentPlayer);
-    CuAssertIntEquals(tc, -1, game.board[box]);
+    game.board[1] = -1;
+    game.board[2] = -1;
+    game.board[6] = -1;
+    game.board[8] = 1;
+    int scores[9];
+
+    for (int i = 0; i < 9; ++i) {
+        if (game.board[i] == 0) {
+            game.board[i] = game.currentPlayer;
+            scores[i] = scoreBoxes(game.board, game.currentPlayer * -1, 0);
+            game.board[i] = 0;
+        }
+    }
+    CuAssertIntEquals(tc, 10, scores[4]);
+    CuAssertIntEquals(tc, -9, scores[3]);
+    CuAssertIntEquals(tc, -9, scores[5]);
+    CuAssertIntEquals(tc, -9, scores[7]);
+    box = makeBestMove(&game);
+    CuAssertIntEquals(tc, 4, box);
     tearDownTestGame();
-}
-
-void TestBoxScore(CuTest *tc) {
-    int xBoard[9] = {1, 1, 1, 0, 0, 0, 0, 0, 0};
-    int oBoard[9] = {-1, -1, -1, 0, 0, 0, 0, 0, 0};
-    int catBoard[9] = {-1, 1, -1, 1, 1, -1, 1, -1, 1};
-
-    printf("Cats Game Box Score\n");
-    CuAssertIntEquals(tc, 0, scoreBox(catBoard, 0));
-
-    printf("X Win This Move Box Score\n");
-    CuAssertIntEquals(tc, 10, scoreBox(xBoard, 0));
-
-    printf("O Win This Move Box Score\n");
-    CuAssertIntEquals(tc, 10, scoreBox(oBoard, 0));
-
-    printf("X Win 2 Moves out Box Score\n");
-    CuAssertIntEquals(tc, 8, scoreBox(xBoard, 2));
 }

@@ -38,6 +38,7 @@ CuSuite *GetSuite() {
     SUITE_ADD_TEST(suite, TestScoresSixBoxesLeft);
     SUITE_ADD_TEST(suite, TestScoresSevenBoxesLeft);
     SUITE_ADD_TEST(suite, TestScoresEightBoxesLeft);
+    SUITE_ADD_TEST(suite, TestShouldTakeWin);
 
     SUITE_ADD_TEST(suite, TestBoxScore);
 

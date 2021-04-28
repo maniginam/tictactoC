@@ -18,8 +18,6 @@ void setSrand() { srand(time(0)); }
 
 int BOARDSIZE = 9;
 
-int makeBestMove(struct gameStatus *game);
-
 int isEmpty(int *board);
 
 int pickCorner();
@@ -54,13 +52,13 @@ int makeBestMove(struct gameStatus *game) {
     if (isEmpty(game->board)) {
         bestBox = pickCorner();
     } else {
-        int score = 10 * game->currentPlayer;
+        int score = -10 * game->currentPlayer;
         for (int i = 0; i < BOARDSIZE; ++i) {
             int boxScore;
             if (game->board[i] == 0) {
                 game->board[i] = game->currentPlayer;
                 boxScore = scoreBoxes(game->board, game->currentPlayer * -1, 0);
-                if (game->currentPlayer == -1) {
+                if (game->currentPlayer == 1) {
                     if (boxScore > score) {
                         score = boxScore;
                         bestBox = i;

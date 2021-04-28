@@ -14,6 +14,13 @@ void initTestGame(struct gameStatus *game, int human) {
     for (int i = 0; i < 9; i++) { game->board[i] = 0; }
 }
 
+void getTestBoard(int *board) {
+    int testBoard[9] = {1, -1, 1, 1, -1, -1, -1, 1, 1};
+    for (int i = 0; i < 9; ++i) {
+        board[i] = testBoard[i];
+    }
+}
+
 void tearDownTestGame() {
     free(game.board);
 }

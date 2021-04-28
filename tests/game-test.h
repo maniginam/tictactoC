@@ -3,7 +3,6 @@
 #include "CuTest.h"
 
 struct gameStatus game;
-int box;
 
 void TestPlayerPosition(CuTest *tc);
 void TestHumanBoxChoice(CuTest *tc);
@@ -20,7 +19,7 @@ void TestHumanTurnX(CuTest *tc);
 void TestHumanTurnO(CuTest *tc);
 void TestHumanXWin(CuTest *tc);
 void TestComputerOWin(CuTest *tc);
-void confirmCornerBox();
+void TestBoxScore(CuTest *tc);
 void TestComputerEmptyBoard(CuTest *tc);
 void TestScoresOneBoxLeft(CuTest *tc);
 void TestScoresTwoBoxesLeft(CuTest *tc);
@@ -31,10 +30,7 @@ void TestScoresFiveBoxesLeft(CuTest *tc);
 void TestScoresSixBoxesLeft(CuTest *tc);
 void TestScoresSevenBoxesLeft(CuTest *tc);
 void TestScoresEightBoxesLeft(CuTest *tc);
-
-
-
-void TestBoxScore(CuTest *tc);
+void TestShouldTakeWin(CuTest *tc);
 
 
 
